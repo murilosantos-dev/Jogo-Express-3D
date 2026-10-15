@@ -143,7 +143,7 @@
                         INICIAR JOGO
                     </button>
                     <button onclick="openLeaderboard()" class="interactive w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl border border-slate-600 transition text-sm">
-                        RANKING GLOBAL
+                        VER RANKING LOCAL
                     </button>
                     <button onclick="exitGame()" class="interactive w-full py-2.5 bg-red-600/20 hover:bg-red-600/40 text-red-400 font-semibold rounded-xl border border-red-500/30 transition text-sm">
                         SAIR DO JOGO
@@ -169,7 +169,7 @@
 
             <!-- LEADERBOARD SCREEN -->
             <div id="leaderboard-screen" class="hidden interactive flex flex-col items-center gap-6 bg-slate-900/90 border border-slate-700 p-8 rounded-3xl backdrop-blur-xl shadow-2xl max-w-md w-full text-center">
-                <h2 class="text-2xl font-bold text-cyan-400">Ranking Global Online</h2>
+                <h2 class="text-2xl font-bold text-cyan-400">Melhores Pontuações Locais</h2>
                 <div id="leaderboard-list" class="w-full space-y-2 max-h-60 overflow-y-auto pr-2">
                     <p class="text-slate-400 text-sm">Carregando placar...</p>
                 </div>
@@ -643,7 +643,7 @@
             document.getElementById('game-over-screen').classList.remove('hidden');
 
             document.getElementById('final-score-message').innerText = `Parabéns ${playerName}, seus pontos acumulados foi ${score}!`;
-            saveScoreToLeaderboard(playerName, score);
+            saveScoreToLocal(playerName, score);
         }
 
         function restartGame() {
@@ -661,7 +661,7 @@
         function openLeaderboard() {
             document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('leaderboard-screen').classList.remove('hidden');
-            fetchLeaderboard();
+            fetchLocalLeaderboard();
         }
 
         function closeLeaderboard() {
@@ -669,33 +669,12 @@
             document.getElementById('menu-screen').classList.remove('hidden');
         }
 
-        // --- SISTEMA DE RANKING ROBUSTO (API Pública de Teste Sem Restrições de Chave) ---
-        const API_URL = "https://api.jsonbin.io/v3/b/65a1261bdc74654018981241";
-
-        async function fetchLeaderboard() {
+        // --- SISTEMA DE LOCALSTORAGE (Salva perfeitamente no aparelho) ---
+        function fetchLocalLeaderboard() {
             const listEl = document.getElementById('leaderboard-list');
-            listEl.innerHTML = '<p class="text-slate-400 text-sm">Carregando placar global...</p>';
+            listEl.innerHTML = '<p class="text-slate-400 text-sm">Carregando placar...</p>';
 
-            try {
-                // Tenta buscar online
-                const res = await fetch("https://api.jsonbin.io/v3/b/65a1261bdc74654018981241/latest", {
-                    headers: { 'X-Master-Key': '$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2' }
-                });
-                const data = await res.json();
-                let scores = data.record || [];
-                
-                // Salva também no cache local para backup instantâneo
-                localStorage.setItem('quiz_express_backup', JSON.stringify(scores));
-                renderLeaderboardUI(scores);
-            } catch (e) {
-                // Fallback automático para o localStorage caso a rede falhe
-                let scores = JSON.parse(localStorage.getItem('quiz_express_backup') || '[]');
-                renderLeaderboardUI(scores);
-            }
-        }
-
-        function renderLeaderboardUI(scores) {
-            const listEl = document.getElementById('leaderboard-list');
+            let scores = JSON.parse(localStorage.getItem('quiz_express_local_scores') || '[]');
             scores.sort((a, b) => b.score - a.score);
 
             if (scores.length === 0) {
@@ -713,95 +692,37 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <span class="font-mono font-bold text-pink-400">${item.score} pts</span>
-                        <button onclick="deleteScore(${index})" class="text-red-400 hover:text-red-300 transition p-1" title="Apagar este recorde">🗑️</button>
+                        <button onclick="deleteLocalScore(${index})" class="text-red-400 hover:text-red-300 transition p-1" title="Apagar este recorde">🗑️</button>
                     </div>
                 `;
                 listEl.appendChild(row);
             });
         }
 
-        async function saveScoreToLeaderboard(name, finalScore) {
-            let scores = [];
-            try {
-                const res = await fetch("https://api.jsonbin.io/v3/b/65a1261bdc74654018981241/latest", {
-                    headers: { 'X-Master-Key': '$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2' }
-                });
-                const data = await res.json();
-                scores = data.record || [];
-            } catch (e) {
-                scores = JSON.parse(localStorage.getItem('quiz_express_backup') || '[]');
-            }
-
+        function saveScoreToLocal(name, finalScore) {
+            let scores = JSON.parse(localStorage.getItem('quiz_express_local_scores') || '[]');
             scores.push({ name: name, score: finalScore });
             scores.sort((a, b) => b.score - a.score);
-            scores = scores.slice(0, 15);
-
-            // Atualiza local imediatamente
-            localStorage.setItem('quiz_express_backup', JSON.stringify(scores));
-
-            try {
-                await fetch("https://api.jsonbin.io/v3/b/65a1261bdc74654018981241", {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2'
-                    },
-                    body: JSON.stringify(scores)
-                });
-            } catch (e) {
-                console.error("Modo offline ativo: Salvo localmente.");
-            }
+            scores = scores.slice(0, 15); // Mantém os top 15
+            localStorage.setItem('quiz_express_local_scores', JSON.stringify(scores));
         }
 
-        async function deleteScore(index) {
-            if (confirm("Deseja realmente apagar este recorde?")) {
-                try {
-                    const res = await fetch("https://api.jsonbin.io/v3/b/65a1261bdc74654018981241/latest", {
-                        headers: { 'X-Master-Key': '$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2' }
-                    });
-                    const data = await res.json();
-                    let scores = data.record || [];
-                    scores.sort((a, b) => b.score - a.score);
-
-                    if (index >= 0 && index < scores.length) {
-                        scores.splice(index, 1);
-                        await fetch("https://api.jsonbin.io/v3/b/65a1261bdc74654018981241", {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-Master-Key': '$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2'
-                            },
-                            body: JSON.stringify(scores)
-                        });
-                        localStorage.setItem('quiz_express_backup', JSON.stringify(scores));
-                        fetchLeaderboard();
-                    }
-                } catch (e) {
-                    let scores = JSON.parse(localStorage.getItem('quiz_express_backup') || '[]');
+        function deleteLocalScore(index) {
+            let scores = JSON.parse(localStorage.getItem('quiz_express_local_scores') || '[]');
+            scores.sort((a, b) => b.score - a.score);
+            if (index >= 0 && index < scores.length) {
+                if (confirm(`Deseja realmente apagar o recorde de "${scores[index].name}"?`)) {
                     scores.splice(index, 1);
-                    localStorage.setItem('quiz_express_backup', JSON.stringify(scores));
-                    renderLeaderboardUI(scores);
+                    localStorage.setItem('quiz_express_local_scores', JSON.stringify(scores));
+                    fetchLocalLeaderboard();
                 }
             }
         }
 
-        async function resetLeaderboard() {
-            if (confirm("Tem certeza que deseja zerar todo o ranking?")) {
-                try {
-                    await fetch("https://api.jsonbin.io/v3/b/65a1261bdc74654018981241", {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Master-Key': '$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2'
-                        },
-                        body: JSON.stringify([])
-                    });
-                    localStorage.removeItem('quiz_express_backup');
-                    fetchLeaderboard();
-                } catch(e) {
-                    localStorage.removeItem('quiz_express_backup');
-                    renderLeaderboardUI([]);
-                }
+        function resetLeaderboard() {
+            if (confirm("Tem certeza que deseja zerar todas as pontuações salvas?")) {
+                localStorage.removeItem('quiz_express_local_scores');
+                fetchLocalLeaderboard();
             }
         }
 
