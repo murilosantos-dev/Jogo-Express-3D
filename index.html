@@ -305,7 +305,7 @@
             }
         }
 
-        // --- BANCO DE PERGUNTAS AMPLIADO ---
+        // --- BANCO DE PERGUNTAS EXPANDIDO (MAIS 20 EM CADA NÍVEL) ---
         const questionBank = {
             facil: [
                 { theme: "Esportes", q: "Quantos jogadores titulares compõem uma equipe de futebol em campo por time?", options: ["7", "9", "11", "12"], answer: 2 },
@@ -330,7 +330,28 @@
                 { theme: "Desenvolvimento de Sistemas", q: "Qual tag HTML é usada para inserir uma imagem?", options: ["<img>", "<image>", "<picture>", "<src>"], answer: 0 },
                 { theme: "Geografia", q: "Qual é o maior oceano da Terra?", options: ["Atlântico", "Pacífico", "Índico", "Ártico"], answer: 1 },
                 { theme: "Tecnologia", q: "Qual empresa desenvolveu o sistema operacional Windows?", options: ["Apple", "Google", "Microsoft", "Linux"], answer: 2 },
-                { theme: "Ciências", q: "Qual gás os seres humanos respiram e é essencial para a vida?", options: ["Gás Carbônico", "Oxigênio", "Nitrogênio", "Hélio"], answer: 1 }
+                { theme: "Ciências", q: "Qual gás os seres humanos respiram e é essencial para a vida?", options: ["Gás Carbônico", "Oxigênio", "Nitrogênio", "Hélio"], answer: 1 },
+                // +20 Novas Fáceis
+                { theme: "Esportes", q: "Quantos tempos tem uma partida oficial de futebol?", options: ["1", "2", "3", "4"], answer: 1 },
+                { theme: "Desenvolvimento de Sistemas", q: "Qual linguagem de programação é utilizada para estilizar páginas web?", options: ["HTML", "CSS", "Python", "C++"], answer: 1 },
+                { theme: "Geografia", q: "Qual é o continente onde fica o Egito?", options: ["Ásia", "Europa", "África", "Oceania"], answer: 2 },
+                { theme: "Animais", q: "Qual é o animal terrestre mais rápido do mundo?", options: ["Leão", "Guepardo", "Cavalo", "Zebra"], answer: 1 },
+                { theme: "Filmes / Séries", q: "No universo Harry Potter, qual é a escola de magia frequentada pelos protagonistas?", options: ["Beauxbatons", "Durmstrang", "Hogwarts", "Ilvermorny"], answer: 2 },
+                { theme: "Jogos", q: "Em qual jogo os jogadores constroem abrigos e sobrevivem a tempestades em ilhas com emotes?", options: ["Minecraft", "Fortnite", "Tetris", "Pac-Man"], answer: 1 },
+                { theme: "Comida", q: "Qual doce tradicional brasileiro é feito com leite condensado e achocolatado?", options: ["Pudim", "Brigadeiro", "Quindim", "Cocada"], answer: 1 },
+                { theme: "Matemática", q: "Quanto é 50 dividido por 2?", options: ["15", "20", "25", "30"], answer: 2 },
+                { theme: "História", q: "Quem pintou a famosa obra 'Mona Lisa'?", options: ["Van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Michelangelo"], answer: 1 },
+                { theme: "Cultura Pop", q: "Qual é a cor principal do traje do Homem-Aranha?", options: ["Azul e Preto", "Vermelho e Azul", "Amarelo e Verde", "Roxo e Dourado"], answer: 1 },
+                { theme: "Desenvolvimento de Sistemas", q: "Qual sinal geralmente representa o fim de uma instrução em linguagens como JavaScript?", options: [",", ";", ".", ":"], answer: 1 },
+                { theme: "Esportes", q: "Quantos pinos formam o objetivo principal derrubar no boliche tradicional?", options: ["8", "10", "12", "15"], answer: 1 },
+                { theme: "Ciências", q: "Qual é o estado físico da água quando está congelada em gelo?", options: ["Líquido", "Gasoso", "Sólido", "Plasma"], answer: 2 },
+                { theme: "Tecnologia", q: "Qual dispositivo é considerado o principal meio de saída de som de um computador?", options: ["Teclado", "Mouse", "Monitor", "Caixa de som / Fone"], answer: 3 },
+                { theme: "Países", q: "De qual país é originário o tango?", options: ["Brasil", "Argentina", "México", "Portugal"], answer: 1 },
+                { theme: "Desenhos", q: "Qual é o nome do coelho falastrão da Turma da Mônica que adora sua pelúcia de Sansão?", options: ["Cebolinha", "Cascão", "Bidu", "Mônica"], answer: 3 },
+                { theme: "Músicas", q: "Qual é o nome dado ao grupo de cinco músicos ou cantores?", options: ["Solo", "Dupla", "Quarteto", "Quinteto"], answer: 3 },
+                { theme: "Comida", q: "Qual fruto seco é a base para fazer o chocolate?", options: ["Amendoim", "Castanha", "Cacau", "Nozes"], answer: 2 },
+                { theme: "Matemática", q: "Qual número vem logo após o 99?", options: ["98", "100", "101", "1000"], answer: 1 },
+                { theme: "Jogos", q: "Qual encanador bigodudo da Nintendo tem um irmão chamado Luigi?", options: ["Wario", "Mario", "Yoshi", "Toad"], answer: 1 }
             ],
             medio: [
                 { theme: "Esportes", q: "Qual país conquistou o pentacampeonato mundial de futebol em 2002?", options: ["Alemanha", "Brasil", "Itália", "França"], answer: 1 },
@@ -355,7 +376,28 @@
                 { theme: "Desenvolvimento de Sistemas", q: "Qual tag HTML é usada para criar o maior título de uma página?", options: ["<title>", "<h6>", "<h1>", "<head>"], answer: 2 },
                 { theme: "Geografia", q: "Qual rio cruza a cidade de Paris, na França?", options: ["Tâmisa", "Sena", "Danúbio", "Reno"], answer: 1 },
                 { theme: "Biologia", q: "Qual organela é considerada a 'central energética' (respiração celular) da célula?", options: ["Ribossomo", "Mitocôndria", "Complexo de Golgi", "Núcleo"], answer: 1 },
-                { theme: "Química", q: "Qual é a fórmula química do sal de cozinha?", options: ["H2O", "NaCl", "CO2", "HCl"], answer: 1 }
+                { theme: "Química", q: "Qual é a fórmula química do sal de cozinha?", options: ["H2O", "NaCl", "CO2", "HCl"], answer: 1 },
+                // +20 Novas Médias
+                { theme: "Desenvolvimento de Sistemas", q: "Em JavaScript, qual comando é usado para exibir uma mensagem no console de depuração?", options: ["print()", "console.log()", "write.text()", "alertbox()"], answer: 1 },
+                { theme: "História", q: "Quem foi o primeiro presidente do Brasil?", options: ["Getúlio Vargas", "Dom Pedro II", "Marechal Deodoro da Fonseca", "Juscelino Kubitschek"], answer: 2 },
+                { theme: "Geografia", q: "Qual é o deserto mais seco e quente do mundo localizado no Chile?", options: ["Saara", "Atacama", "Gobi", "Kalahari"], answer: 1 },
+                { theme: "Física", q: "Qual é a unidade de medida oficial da força no Sistema Internacional (SI)?", options: ["Joule", "Watt", "Newton", "Pascal"], answer: 2 },
+                { theme: "Filmes / Séries", q: "Qual é o nome da inteligência artificial rebelde na franquia de filmes 'O Exterminador do Futuro'?", options: ["Jarvis", "Skynet", "Ultron", "Matrix"], answer: 1 },
+                { theme: "Jogos", q: "Qual jogo de tiro tático em equipes da Riot Games mistura tiros precisos com habilidades de agentes?", options: ["Counter-Strike", "Valorant", "Overwatch", "Call of Duty"], answer: 1 },
+                { theme: "Tecnologia", q: "O que a sigla 'USB' significa no contexto de conexões de computadores?", options: ["Universal Serial Bus", "Ultra System Board", "Unified Software Bridge", "Utility Serial Byte"], answer: 0 },
+                { theme: "Matemática", q: "Se um triângulo tem lados medindo 3, 4 e 5, que tipo de triângulo ele é em relação aos ângulos?", options: ["Acutângulo", "Retângulo", "Obtusângulo", "Equilátero"], answer: 1 },
+                { theme: "Biologia", q: "Quantos pares de costelas possui um ser humano adulto saudável em condições normais?", options: ["10", "12", "14", "16"], answer: 1 },
+                { theme: "Química", q: "Qual elemento químico possui o símbolo 'Fe' na tabela periódica?", options: ["Flúor", "Ferro", "Fósforo", "Frâncio"], answer: 1 },
+                { theme: "Esportes", q: "Em qual país nasceu o basquete, criado por James Naismith em 1891?", options: ["Inglaterra", "Estados Unidos", "Canadá", "França"], answer: 2 },
+                { theme: "Literatura", q: "Qual autor brasileiro escreveu o clássico romance modernista 'Macunaíma'?", options: ["Machado de Assis", "Mário de Andrade", "José de Alencar", "Monteiro Lobato"], answer: 1 },
+                { theme: "Astronomia", q: "Qual planeta do Sistema Solar é conhecido como o 'Planeta Vermelho'?", options: ["Vênus", "Marte", "Júpiter", "Saturno"], answer: 1 },
+                { theme: "Desenvolvimento de Sistemas", q: "Em CSS, qual propriedade define o espaçamento interno entre o conteúdo e a borda?", options: ["margin", "padding", "border-spacing", "outline"], answer: 1 },
+                { theme: "Músicas", q: "Qual artista brasileira lançou o aclamado álbum 'Girl from Rio' e alcançou paradas internacionais?", options: ["Ivete Sangalo", "Anitta", "Marília Mendonça", "Luísa Sonza"], answer: 1 },
+                { theme: "Geografia", q: "Qual estreita faixa de água separa os continentes da Europa e da África no Estreito?", options: ["Estreito de Bering", "Estreito de Gibraltar", "Canal de Suez", "Canal do Panamá"], answer: 1 },
+                { theme: "Cultura Pop", q: "Na cultura dos quadrinhos, qual é o nome verdadeiro do herói Batman?", options: ["Clark Kent", "Bruce Wayne", "Peter Parker", "Tony Stark"], answer: 1 },
+                { theme: "Comida", q: "De qual país é originário o prato tradicional de massa macia chamado Nhoque (Gnocchi)?", options: ["França", "Itália", "Alemanha", "Grécia"], answer: 1 },
+                { theme: "Matemática", q: "Qual é o valor do seno de 30 graus (sen 30°)?", options: ["0", "0,5", "1", "0,86"], answer: 1 },
+                { theme: "Tecnologia", q: "Qual protocolo é amplamente utilizado para transferir páginas web seguras de servidores para navegadores?", options: ["FTP", "HTTPS", "SMTP", "SSH"], answer: 1 }
             ],
             dificil: [
                 { theme: "Esportes", q: "Quantos jogadores titulares compõem uma equipe de basquete em quadra por time?", options: ["5", "6", "7", "11"], answer: 0 },
@@ -380,7 +422,28 @@
                 { theme: "Desenvolvimento de Sistemas", q: "Em CSS, qual propriedade controla o espaço interno entre o conteúdo e a borda de um elemento?", options: ["margin", "padding", "spacing", "border-gap"], answer: 1 },
                 { theme: "Física", q: "Quem formulou a Teoria da Relatividade Geral?", options: ["Isaac Newton", "Albert Einstein", "Galileu Galilei", "Nikola Tesla"], answer: 1 },
                 { theme: "Astronomia", q: "Qual é o maior planeta do Sistema Solar?", options: ["Saturno", "Júpiter", "Netuno", "Marte"], answer: 1 },
-                { theme: "Desenvolvimento de Sistemas", q: "Qual seletor CSS é utilizado especificamente para selecionar um elemento pelo seu ID?", options: [".", "#", "*", "&"], answer: 1 }
+                { theme: "Desenvolvimento de Sistemas", q: "Qual seletor CSS é utilizado especificamente para selecionar um elemento pelo seu ID?", options: [".", "#", "*", "&"], answer: 1 },
+                // +20 Novas Difíceis
+                { theme: "Desenvolvimento de Sistemas", q: "Em JavaScript, qual método converte uma string de formato JSON em um objeto nativo?", options: ["JSON.parse()", "JSON.stringify()", "JSON.object()", "JSON.convert()"], answer: 0 },
+                { theme: "Física Quântica", q: "Qual princípio da mecânica quântica afirma que não se pode medir simultaneamente e com precisão absoluta a posição e o momento de uma partícula?", options: ["Princípio de Arquimedes", "Princípio da Incerteza de Heisenberg", "Efeito Doppler", "Lei de Coulomb"], answer: 1 },
+                { theme: "História", q: "Qual tratado assinado em 1494 dividiu as terras recém-descobertas entre Portugal e Espanha?", options: ["Tratado de Versalhes", "Tratado de Tordesilhas", "Tratado de Westfália", "Acordo de Paris"], answer: 1 },
+                { theme: "Matemática", q: "Qual é a derivada da função f(x) = x² em relação a x?", options: ["x", "2x", "x²", "2"], answer: 1 },
+                { theme: "Computação", q: "Qual estrutura de dados opera estritamente no princípio FIFO (First In, First Out / Primeiro a Entrar, Primeiro a Sair)?", options: ["Pilha (Stack)", "Fila (Queue)", "Árvore (Tree)", "Grafo (Graph)"], answer: 1 },
+                { theme: "Biologia", q: "Como se chama o processo de divisão celular que resulta na formação de células sexuais (gametas) com metade dos cromossomos?", options: ["Mitose", "Meiose", "Clivagem", "Osmose"], answer: 1 },
+                { theme: "Química", q: "Qual é o pH aproximado de uma solução estritamente neutra a 25°C?", options: ["0", "7", "14", "5"], answer: 1 },
+                { theme: "Geografia", q: "Qual é o país que possui a maior linha costeira contínua do mundo?", options: ["Rússia", "Austrália", "Canadá", "Estados Unidos"], answer: 2 },
+                { theme: "Linguagens de Programação", q: "Qual linguagem de programação foi criada por Guido van Rossum e lançada em 1991?", options: ["Java", "C++", "Python", "Ruby"], answer: 2 },
+                { theme: "Filosofia", q: "Qual filósofo grego antigo foi mestre de Platão e famoso pelo método de questionamento maiêutico?", options: ["Aristóteles", "Sócrates", "Pitágoras", "Heráclito"], answer: 1 },
+                { theme: "Astronomia", q: "Como é chamado o ponto de não retorno em torno de um buraco negro?", options: ["Supernova", "Horizonte de Eventos", "Anã Branca", "Pulsares"], answer: 1 },
+                { theme: "Criptografia", q: "Qual algoritmo de criptografia simétrica amplamente adotado substituiu o antigo DES como padrão global?", options: ["RSA", "AES (Advanced Encryption Standard)", "MD5", "SHA-1"], answer: 1 },
+                { theme: "Medicina", q: "Qual é a principal artéria do corpo humano que transporta sangue oxigenado do coração para o resto do corpo?", options: ["Artéria Pulmonar", "Artéria Carótida", "Artéria Aorta", "Veia Cava"], answer: 2 },
+                { theme: "Redes de Computadores", q: "Qual camada do modelo OSI é responsável pelo endereçamento lógico e roteamento de pacotes (ex: protocolo IP)?", options: ["Camada Física", "Camada de Enlace", "Camada de Rede", "Camada de Transporte"], answer: 2 },
+                { theme: "Literatura", q: "Qual poeta épico grego é tradicionalmente creditado como o autor da 'Ilíada' e da 'Odisseia'?", options: ["Sófocles", "Homero", "Eurípides", "Ésquilo"], answer: 1 },
+                { theme: "Economia", q: "O que mede o índice macroeconômico conhecido como PIB (Produto Interno Bruto)?", options: ["A inflação acumulada do ano", "O total de bens e serviços finais produzidos em um país", "A taxa de desemprego estrutural", "O saldo da balança comercial externa"], answer: 1 },
+                { theme: "Arquitetura de Computadores", q: "O que significa a sigla 'RAM' em memórias de computadores?", options: ["Read Access Memory", "Random Access Memory", "Rapid Allocation Module", "Real Active Microchip"], answer: 1 },
+                { theme: "Geopolítica", q: "Qual canal artificial aberto em 1869 conecta o Mar Mediterrâneo ao Mar Vermelho?", options: ["Canal do Panamá", "Canal de Kiel", "Canal de Suez", "Canal da Cornualha"], answer: 2 },
+                { theme: "Matemática", q: "Qual é o valor do logaritmo de 1 na base 10 (log₁₀ 1)?", options: ["0", "1", "10", "Indeterminado"], answer: 0 },
+                { theme: "Engenharia de Software", q: "No contexto de padrões de projeto (Design Patterns), a qual categoria pertence o padrão 'Singleton'?", options: ["Comportamentais", "Estruturais", "Criacionais", "Arquiteturais"], answer: 2 }
             ]
         };
 
@@ -669,7 +732,7 @@
             document.getElementById('menu-screen').classList.remove('hidden');
         }
 
-        // --- SISTEMA DE LOCALSTORAGE (Salva perfeitamente no aparelho) ---
+        // --- SISTEMA DE LOCALSTORAGE ---
         function fetchLocalLeaderboard() {
             const listEl = document.getElementById('leaderboard-list');
             listEl.innerHTML = '<p class="text-slate-400 text-sm">Carregando placar...</p>';
@@ -703,7 +766,7 @@
             let scores = JSON.parse(localStorage.getItem('quiz_express_local_scores') || '[]');
             scores.push({ name: name, score: finalScore });
             scores.sort((a, b) => b.score - a.score);
-            scores = scores.slice(0, 15); // Mantém os top 15
+            scores = scores.slice(0, 15);
             localStorage.setItem('quiz_express_local_scores', JSON.stringify(scores));
         }
 
