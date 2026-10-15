@@ -440,7 +440,6 @@
         let usedQuestions = [];
         let lastQuestionIndex = -1;
 
-        // Controle do tempo limite do combo (Médio = 4s, Difícil = 3s)
         let comboTimerInterval = null;
         let comboTimeLeft = 0;
         let comboMaxTime = 0;
@@ -505,7 +504,6 @@
             }, 1000);
         }
 
-        // --- SISTEMA DE TEMPORIZADOR DE COMBO (4s no Médio, 3s no Difícil) ---
         function startComboTimer() {
             if (selectedDifficulty === 'facil' || combo <= 1) {
                 document.getElementById('combo-timer-container').classList.add('hidden');
@@ -513,8 +511,6 @@
             }
 
             document.getElementById('combo-timer-container').classList.remove('hidden');
-            
-            // Alterado para 4 segundos no Médio e mantido 3 segundos no Difícil
             comboMaxTime = selectedDifficulty === 'medio' ? 4 : 3;
             comboTimeLeft = comboMaxTime;
 
@@ -539,7 +535,6 @@
             document.getElementById('combo-display').innerText = combo + 'x';
         }
 
-        // --- QUIZ LOGIC ---
         function loadNextQuestion() {
             const currentBank = questionBank[selectedDifficulty];
 
@@ -674,31 +669,20 @@
             document.getElementById('menu-screen').classList.remove('hidden');
         }
 
-        function resetLeaderboard() {
-            if (confirm("Tem certeza que deseja zerar todo o ranking salvo?")) {
-                localStorage.removeItem('quiz_express_scores');
-                fetchLeaderboard();
-            }
-        }
-
-        // --- FUNÇÃO PARA APAGAR UM RECORDE ESPECÍFICO DO RANKING ---
-        function deleteScore(index) {
-            let scores = JSON.parse(localStorage.getItem('quiz_express_scores') || '[]');
-            if (index >= 0 && index < scores.length) {
-                if (confirm(`Deseja apagar o recorde de "${scores[index].name}"?`)) {
-                    scores.splice(index, 1);
-                    localStorage.setItem('quiz_express_scores', JSON.stringify(scores));
-                    fetchLeaderboard();
-                }
-            }
-        }
+        // --- JSONBIN GLOBAL ONLINE INTEGRATION ---
+        const BIN_ID = "65a1261bdc74654018981241";
+        const API_KEY = "$2a$10$T8Vq00jX2W5qQYF4rD0t9u4jQ88mE6c29qB1tXvV7K5g8HwD0YcK2";
 
         async function fetchLeaderboard() {
             const listEl = document.getElementById('leaderboard-list');
             listEl.innerHTML = '<p class="text-slate-400 text-sm">Carregando placar global...</p>';
 
             try {
-                let scores = JSON.parse(localStorage.getItem('quiz_express_scores') || '[]');
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const data = await res.json();
+                let scores = data.record || [];
                 scores.sort((a, b) => b.score - a.score);
 
                 if (scores.length === 0) {
@@ -707,12 +691,12 @@
                 }
 
                 listEl.innerHTML = '';
-                scores.slice(0, 5).forEach((item, index) => {
+                scores.slice(0, 10).forEach((item, index) => {
                     const row = document.createElement('div');
                     row.className = "flex justify-between items-center bg-slate-800/80 px-4 py-3 rounded-xl border border-slate-700";
                     row.innerHTML = `
                         <div class="flex items-center gap-2">
-                            <span class="font-bold text-cyan-400">#${index+1} ${item.name}</span>
+                            <span class="font-bold text-cyan-400">#${index+1} ${escapeHtml(item.name)}</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="font-mono font-bold text-pink-400">${item.score} pts</span>
@@ -722,15 +706,83 @@
                     listEl.appendChild(row);
                 });
             } catch (e) {
-                listEl.innerHTML = '<p class="text-red-400 text-sm">Erro ao carregar o ranking.</p>';
+                listEl.innerHTML = '<p class="text-red-400 text-sm">Erro ao conectar com o ranking online.</p>';
             }
         }
 
-        function saveScoreToLeaderboard(name, finalScore) {
-            let scores = JSON.parse(localStorage.getItem('quiz_express_scores') || '[]');
-            scores.push({ name: name, score: finalScore });
-            scores.sort((a, b) => b.score - a.score);
-            localStorage.setItem('quiz_express_scores', JSON.stringify(scores));
+        async function saveScoreToLeaderboard(name, finalScore) {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const data = await res.json();
+                let scores = data.record || [];
+
+                scores.push({ name: name, score: finalScore });
+                scores.sort((a, b) => b.score - a.score);
+                scores = scores.slice(0, 15);
+
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(scores)
+                });
+            } catch (e) {
+                console.error("Erro ao salvar no ranking online");
+            }
+        }
+
+        async function deleteScore(index) {
+            if (confirm("Deseja realmente apagar este recorde do ranking online?")) {
+                try {
+                    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                        headers: { 'X-Master-Key': API_KEY }
+                    });
+                    const data = await res.json();
+                    let scores = data.record || [];
+                    scores.sort((a, b) => b.score - a.score);
+
+                    if (index >= 0 && index < scores.length) {
+                        scores.splice(index, 1);
+                        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': API_KEY
+                            },
+                            body: JSON.stringify(scores)
+                        });
+                        fetchLeaderboard();
+                    }
+                } catch (e) {
+                    alert("Erro ao excluir o recorde.");
+                }
+            }
+        }
+
+        async function resetLeaderboard() {
+            if (confirm("Tem certeza que deseja zerar todo o ranking online?")) {
+                try {
+                    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': API_KEY
+                        },
+                        body: JSON.stringify([])
+                    });
+                    fetchLeaderboard();
+                } catch(e) {
+                    alert("Erro ao zerar o ranking.");
+                }
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     </script>
 </body>
